@@ -1,4 +1,4 @@
-import {useState} from "react";
+import {type Dispatch, type SetStateAction, useState} from "react";
 import {Link} from "react-router-dom";
 import {AppRoute} from "../../constants.ts";
 
@@ -10,13 +10,22 @@ type CitiesCardProps = {
     isPremium: boolean;
     previewImage: string;
     rating: number;
+    setSelectPoint: Dispatch<SetStateAction<string | null>>
 }
 
-function CitiesCard({ id, title, type, price, previewImage, isPremium, rating }: CitiesCardProps) {
+function CitiesCard({ id, title, type, price, previewImage, isPremium, rating, setSelectPoint }: CitiesCardProps) {
     const [, setOfferId] = useState('');
 
     return(
-        <article className="cities__card place-card" onMouseOver={() => setOfferId(id)} onMouseOut={() => setOfferId('')}>
+        <article
+            className="cities__card place-card"
+            onMouseEnter={() => setSelectPoint(id)}
+            onMouseOver={() => {
+                setOfferId(id);
+                setSelectPoint(id);
+            }}
+            onMouseOut={() => setOfferId('')}
+        >
             {isPremium ? (
                 <div className="place-card__mark">
                     <span>Premium</span>
@@ -46,7 +55,7 @@ function CitiesCard({ id, title, type, price, previewImage, isPremium, rating }:
                     </div>
                 </div>
                 <h2 className="place-card__name">
-                    <a href={`/offer/${id}`}>{title}</a>
+                    <Link to={`${AppRoute.Offers}/${id}`}>{title}</Link>
                 </h2>
                 <p className="place-card__type">{type}</p>
             </div>

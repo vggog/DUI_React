@@ -1,5 +1,4 @@
 import type {FullOffer} from '../types/offer.ts';
-// 'id': 'bbb86a0e-3f92-446d-9a6e-cbd4b5d38e2b',
 
 export const offers: FullOffer[] = [
     {
@@ -17,16 +16,21 @@ export const offers: FullOffer[] = [
             '../../public/img/paris/img_5.png'
         ],
         'city': {
-            'name': 'Paris',
+            'title': 'Amsterdam',
+            'zoom': 13,
             'location': {
-                'latitude': 48.85661,
-                'longitude': 2.351499,
+                'id': '1',
+                'title': 'Amsterdam',
+                'lat': 52.370216,
+                'lng': 4.895168,
                 'zoom': 13
             }
         },
         'location': {
-            'latitude': 48.858610800000004,
-            'longitude': 2.342499,
+            'id': '1',
+            'title': 'Amsterdam',
+            'lat': 52.3702,
+            'lng': 4.8952,
             'zoom': 16
         },
         'goods': [
@@ -53,7 +57,8 @@ export const offers: FullOffer[] = [
         'isFavorite': true,
         'rating': 4.9,
         'bedrooms': 2,
-        'maxAdults': 3
+        'maxAdults': 3,
+        'neighbors': ['2', '3', '5']
     },
     {
         'id': '2',
@@ -70,17 +75,22 @@ export const offers: FullOffer[] = [
             '../../public/img/berlin/img_5.png'
         ],
         'city': {
-            'name': 'Berlin',
+            'title': 'Amsterdam',
+            'zoom': 13,
             'location': {
-                'latitude': 52.5200,
-                'longitude': 13.4050,
-                'zoom': 12
+                'id': '1',
+                'title': 'Amsterdam',
+                'lat': 52.370216,
+                'lng': 4.895168,
+                'zoom': 13
             }
         },
         'location': {
-            'latitude': 52.5244,
-            'longitude': 13.4105,
-            'zoom': 15
+            'id': '2',
+            'title': 'Amsterdam',
+            'lat': 52.3589,
+            'lng': 4.8811,
+            'zoom': 16
         },
         'goods': [
             'Wi-Fi',
@@ -103,7 +113,8 @@ export const offers: FullOffer[] = [
         'isFavorite': false,
         'rating': 4.7,
         'bedrooms': 1,
-        'maxAdults': 2
+        'maxAdults': 2,
+        'neighbors': ['1', '3', '4']
     },
     {
         'id': '3',
@@ -120,17 +131,22 @@ export const offers: FullOffer[] = [
             '../../public/img/marcel/img_5.png'
         ],
         'city': {
-            'name': 'Marcel',
+            'title': 'Amsterdam',
+            'zoom': 13,
             'location': {
-                'latitude': 43.9493,
-                'longitude': 4.8054,
-                'zoom': 10
+                'id': '1',
+                'title': 'Amsterdam',
+                'lat': 52.370216,
+                'lng': 4.895168,
+                'zoom': 13
             }
         },
         'location': {
-            'latitude': 43.9512,
-            'longitude': 4.8089,
-            'zoom': 14
+            'id': '3',
+            'title': 'Amsterdam',
+            'lat': 52.3633,
+            'lng': 4.8875,
+            'zoom': 16
         },
         'goods': [
             'Fireplace',
@@ -152,7 +168,8 @@ export const offers: FullOffer[] = [
         'isFavorite': true,
         'rating': 4.8,
         'bedrooms': 3,
-        'maxAdults': 6
+        'maxAdults': 6,
+        'neighbors': ['2', '4', '5']
     },
     {
         'id': '4',
@@ -170,16 +187,21 @@ export const offers: FullOffer[] = [
             'penthouse7.jpg'
         ],
         'city': {
-            'name': 'Monaco',
+            'title': 'Amsterdam',
+            'zoom': 13,
             'location': {
-                'latitude': 43.7384,
-                'longitude': 7.4246,
+                'id': '1',
+                'title': 'Amsterdam',
+                'lat': 52.370216,
+                'lng': 4.895168,
                 'zoom': 13
             }
         },
         'location': {
-            'latitude': 43.7396,
-            'longitude': 7.4270,
+            'id': '4',
+            'title': 'Amsterdam',
+            'lat': 52.3696,
+            'lng': 4.8828,
             'zoom': 16
         },
         'goods': [
@@ -207,7 +229,8 @@ export const offers: FullOffer[] = [
         'isFavorite': true,
         'rating': 5.0,
         'bedrooms': 4,
-        'maxAdults': 8
+        'maxAdults': 8,
+        'neighbors': ['1', '2', '3']
     },
     {
         'id': '5',
@@ -225,16 +248,21 @@ export const offers: FullOffer[] = [
             'penthouse7.jpg'
         ],
         'city': {
-            'name': 'Monaco',
+            'title': 'Amsterdam',
+            'zoom': 13,
             'location': {
-                'latitude': 43.7384,
-                'longitude': 7.4246,
+                'id': '1',
+                'title': 'Amsterdam',
+                'lat': 52.370216,
+                'lng': 4.895168,
                 'zoom': 13
             }
         },
         'location': {
-            'latitude': 43.7396,
-            'longitude': 7.4270,
+            'id': '5',
+            'title': 'Amsterdam',
+            'lat': 52.3678,
+            'lng': 4.8958,
             'zoom': 16
         },
         'goods': [
@@ -262,7 +290,7 @@ export const offers: FullOffer[] = [
         'isFavorite': true,
         'rating': 5.0,
         'bedrooms': 4,
-        'maxAdults': 8
+        'maxAdults': 8,
+        'neighbors': ['2', '3', '4']
     }
 ];
-

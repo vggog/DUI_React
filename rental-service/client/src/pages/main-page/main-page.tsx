@@ -1,6 +1,10 @@
 import {Logo} from "../../components/logo/logo.tsx";
 import {CitiesCardList} from "../../components/cities-card-list/cities-card-list.tsx";
 import type {OffersList} from "../../types/offer.ts";
+import Map from "../../components/map/map.tsx";
+import {cities} from "../../mocks/cities.ts";
+import {useEffect, useState} from "react";
+import type {City, Point} from "../../types/coordinates.ts";
 
 
 type MainPageProps = {
@@ -9,16 +13,47 @@ type MainPageProps = {
 };
 
 function MainPage({rentalOffersCount, offersList}: MainPageProps) {
+    const [selectedPoint, setSelectedPoint] = useState<Point | null>(null);
+    const [selectedOfferId, setSelectedOfferId] = useState<string | null>(null);
+
+    const [city, setCity] = useState<City | null>(null);
+    const [cityPoints, setCityPoints] = useState<Point[]>([])
+
+    useEffect(() => {
+        const foundCity = cities.find((c: City) => c.title === "Amsterdam");
+        if (foundCity) {
+            setCity(foundCity);
+        }
+
+        const cityPoints = offersList.map((offer: OffersList) => offer.location);
+
+        setCityPoints(cityPoints);
+    }, []);
+
+    useEffect(() => {
+        if (!selectedOfferId) {
+            setSelectedPoint(null);
+            return;
+        }
+
+        const selectedOffer = offersList.find(
+            (offer) => offer.id === selectedOfferId,
+        );
+
+        if (!selectedOffer) {
+            setSelectedPoint(null);
+            return;
+        }
+
+        setSelectedPoint(selectedOffer.location);
+    }, [selectedOfferId, offersList]);
+
     return (
         <div className="page page--gray page--main">
             <header className="header">
                 <div className="container">
                     <div className="header__wrapper">
                         <div className="header__left">
-                            {/*<a className="header__logo-link header__logo-link--active">*/}
-                            {/*    <img className="header__logo" src="img/logo.svg" alt="Rent service logo" width="81"*/}
-                            {/*         height="41"/>*/}
-                            {/*</a>*/}
                             <Logo/>
                         </div>
                         <nav className="header__nav">
@@ -101,13 +136,19 @@ function MainPage({rentalOffersCount, offersList}: MainPageProps) {
                                 </ul>
                             </form>
                             <div className="cities__places-list places__list tabs__content">
-
-                                <CitiesCardList offersList={offersList} />
-
+                                <CitiesCardList offersList={offersList} setSelectPoint={setSelectedOfferId}/>
                             </div>
                         </section>
                         <div className="cities__right-section">
-                            <section className="cities__map map"></section>
+                            <section className="cities__map map">
+                                {city && cityPoints.length > 0 && (
+                                    <Map
+                                        city={city}
+                                        points={cityPoints}
+                                        selectedPoint={selectedPoint}
+                                    />
+                                )}
+                            </section>
                         </div>
                     </div>
                 </div>

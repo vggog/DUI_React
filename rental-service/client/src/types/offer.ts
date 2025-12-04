@@ -1,13 +1,16 @@
-type OfferLocation = {
-    latitude: number;
-    longitude: number;
-    zoom: number;
-};
+// type OfferLocation = {
+//     latitude: number;
+//     longitude: number;
+//     zoom: number;
+// };
+//
+// type CityOffer = {
+//     name: string;
+//     location: OfferLocation;
+// };
 
-type CityOffer = {
-    name: string;
-    location: OfferLocation;
-};
+
+import type {City, Point} from "./coordinates.ts";
 
 type HostOffer = {
     name: string;
@@ -20,8 +23,8 @@ export type FullOffer = {
     title: string;
     type: string;
     price: number;
-    city: CityOffer;
-    location: OfferLocation;
+    city: City;
+    location: Point;
     isFavorite: boolean;
     isPremium: boolean;
     rating: number;
@@ -30,6 +33,7 @@ export type FullOffer = {
     goods: string[];
     host: HostOffer;
     images: string[];
+    neighbors: string[],
     maxAdults: number;
 };
 
@@ -38,8 +42,8 @@ export type OffersList = {
     title: string;
     type: string;
     price: number;
-    city: CityOffer;
-    location: OfferLocation;
+    city: City;
+    location: Point;
     isFavorite: boolean;
     isPremium: boolean;
     rating: number;

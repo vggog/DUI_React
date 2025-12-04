@@ -1,25 +1,42 @@
 import {Logo} from "../../components/logo/logo.tsx";
 import type {FullOffer} from "../../types/offer.ts";
-import {Link, useParams} from "react-router-dom";
+import {useParams} from "react-router-dom";
 import {NotFound} from "../../components/not-found/not-found.tsx";
 import {ReviewForm} from "../../components/review-form/review-form.tsx";
-import {AppRoute} from "../../constants.ts";
+import {ReviewsList} from "../../components/review-list/review-list.component.tsx";
+import type {ReviewType} from "../../types/reviews.ts";
+import Map from "../../components/map/map.tsx";
+import {CitiesCardList} from "../../components/cities-card-list/cities-card-list.tsx";
+import {mapFullOffersToOffersList} from "../../mocks/offers-list.ts";
+import {useEffect} from "react";
 
 type OfferPageProps = {
     offers: FullOffer[],
+    reviews: ReviewType[];
 };
 
-function OfferPage({offers}: OfferPageProps) {
+function OfferPage({offers, reviews}: OfferPageProps) {
     const params = useParams();
     const offer = offers.find(offer => offer.id === params.id);
-    console.log(offer);
     if (!offer) {
         return <NotFound />;
     }
 
-    const nearbyOffers = offers
-        .filter((item) => item.id !== offer.id)
-        .slice(0, 3);
+    const nearbyOffers: FullOffer[] = offer
+        .neighbors
+        .map((neighborId) => offers.find((offer) => offer.id === neighborId))
+        .filter((offer) => offer !== undefined);
+
+    const offerReviews: ReviewType[] = reviews.filter(review => review.offerId === offer.id);
+
+    const city = offers.find((offer: FullOffer) => offer.id === params.id)?.city;
+    const points = nearbyOffers.map((offer: FullOffer) => offer.location);
+    points.push(offer.location);
+    const selectedPoint = offer.location;
+
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, [params.id]);
 
     return (
         <div className="page">
@@ -134,66 +151,31 @@ function OfferPage({offers}: OfferPageProps) {
                                     </p>
                                 </div>
                             </div>
-                            {/* Временный заглушка для отзывов - удалить когда добавится тип Review */}
                             <section className="offer__reviews reviews">
-                                <h2 className="reviews__title">Reviews &middot; <span
-                                    className="reviews__amount">0</span></h2>
-                                <ul className="reviews__list">
-                                    {/* Отзывы временно удалены */}
-                                </ul>
+                                <ReviewsList reviews={offerReviews} />
+
                                 <ReviewForm />
                             </section>
                         </div>
                     </div>
-                    <section className="offer__map map"></section>
+                    <section className="offer__map map" style={{width: '1144px', margin: '0 auto', display: 'block'}}>
+                        {city && points.length > 0 && (
+                            <Map
+                                city={city}
+                                points={points}
+                                selectedPoint={selectedPoint}
+                            />
+                        )}
+                    </section>
                 </section>
                 <div className="container">
                     <section className="near-places places">
-
                         <h2 className="near-places__title">Other places in the neighbourhood</h2>
                         <div className="near-places__list places__list">
-                            {nearbyOffers.map((nearbyOffer) => (
-                                <article key={nearbyOffer.id} className="near-places__card place-card">
-                                    {nearbyOffer.isPremium ? (
-                                        <div className="place-card__mark">
-                                            <span>Premium</span>
-                                        </div>
-                                    ) : null}
-                                    <div className="near-places__image-wrapper place-card__image-wrapper">
-                                        <Link to={`${AppRoute.Offers}/${nearbyOffer.id}`}>
-                                            <img className="place-card__image" src={nearbyOffer.images[0]} width="260" height="200" alt="Place image"/>
-                                        </Link>
-                                    </div>
-                                    <div className="place-card__info">
-                                        <div className="place-card__price-wrapper">
-                                            <div className="place-card__price">
-                                                <b className="place-card__price-value">&euro;{nearbyOffer.price}</b>
-                                                <span className="place-card__price-text">&#47;&nbsp;night</span>
-                                            </div>
-                                            <button
-                                                className="place-card__bookmark-button button"
-                                                type="button">
-                                                <svg className="place-card__bookmark-icon" width="18" height="19">
-                                                    <use href="#icon-bookmark"></use>
-                                                </svg>
-                                                <span className="visually-hidden">In bookmarks</span>
-                                            </button>
-                                        </div>
-                                        <div className="place-card__rating rating">
-                                            <div className="place-card__stars rating__stars">
-                                                <span style={{width: `${nearbyOffer.rating * 20}%`}}></span>
-                                                <span className="visually-hidden">Rating</span>
-                                            </div>
-                                        </div>
-                                        <h2 className="place-card__name">
-                                            <Link to={`${AppRoute.Offers}/${nearbyOffer.id}`}>
-                                                {nearbyOffer.title}
-                                            </Link>
-                                        </h2>
-                                        <p className="place-card__type">{nearbyOffer.type}</p>
-                                    </div>
-                                </article>
-                            ))}
+                            <CitiesCardList
+                                offersList={mapFullOffersToOffersList(nearbyOffers)}
+                                setSelectPoint={() => {}}
+                            />
                         </div>
                     </section>
                 </div>
