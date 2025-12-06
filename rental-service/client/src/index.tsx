@@ -5,14 +5,18 @@ import {Settings} from "./constants.ts";
 import {offers} from "./mocks/offers.ts";
 import {mapFullOffersToOffersList} from "./mocks/offers-list.ts";
 import {reviews} from "./mocks/reviews.ts";
+import {Provider} from "react-redux";
+import {store} from "./store";
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-      <App
-          rentalOffersCount={Settings.rentalOffersCount}
-          offersList={mapFullOffersToOffersList(offers)}
-          offers={offers}
-          reviews={reviews}
-      />
+      <Provider store={store}>
+          <App
+              rentalOffersCount={Settings.rentalOffersCount}
+              offersList={mapFullOffersToOffersList(offers)}
+              offers={offers}
+              reviews={reviews}
+          />
+      </Provider>
   </StrictMode>,
 )

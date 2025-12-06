@@ -1,6 +1,6 @@
 import {Logo} from "../../components/logo/logo.tsx";
 import type {FullOffer} from "../../types/offer.ts";
-import {useParams} from "react-router-dom";
+import {Link, useParams} from "react-router-dom";
 import {NotFound} from "../../components/not-found/not-found.tsx";
 import {ReviewForm} from "../../components/review-form/review-form.tsx";
 import {ReviewsList} from "../../components/review-list/review-list.component.tsx";
@@ -9,13 +9,15 @@ import Map from "../../components/map/map.tsx";
 import {CitiesCardList} from "../../components/cities-card-list/cities-card-list.tsx";
 import {mapFullOffersToOffersList} from "../../mocks/offers-list.ts";
 import {useEffect} from "react";
+import {AppRoute} from "../../constants.ts";
 
 type OfferPageProps = {
+    favoriteCount: number,
     offers: FullOffer[],
     reviews: ReviewType[];
 };
 
-function OfferPage({offers, reviews}: OfferPageProps) {
+function OfferPage({favoriteCount, offers, reviews}: OfferPageProps) {
     const params = useParams();
     const offer = offers.find(offer => offer.id === params.id);
     if (!offer) {
@@ -49,12 +51,12 @@ function OfferPage({offers, reviews}: OfferPageProps) {
                         <nav className="header__nav">
                             <ul className="header__nav-list">
                                 <li className="header__nav-item user">
-                                    <a className="header__nav-link header__nav-link--profile" href="#">
-                                        <div className="header__avatar-wrapper user__avatar-wrapper">
+                                    <Link to={`${AppRoute.Favorites}`} className="header__nav-link header__nav-link--profile">
+                                        <div>
+                                            <span className="header__user-name user__name">Myemail@gmail.com</span>
+                                            <span className="header__favorite-count">{favoriteCount}</span>
                                         </div>
-                                        <span className="header__user-name user__name">Myemail@gmail.com</span>
-                                        <span className="header__favorite-count">3</span>
-                                    </a>
+                                    </Link>
                                 </li>
                                 <li className="header__nav-item">
                                     <a className="header__nav-link" href="#">

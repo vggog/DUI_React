@@ -9,7 +9,7 @@ function FavoritesCardList({ offersList }: FavoritesCardListProps){
     const favoriteOffers = offersList.filter((offer) => offer.isFavorite);
 
     const offersByCity = favoriteOffers.reduce<Record<string, OffersList[]>>((acc, offer) => {
-        const cityName = offer.city.name;
+        const cityName = offer.city.title
         if (!acc[cityName]) {
             acc[cityName] = [];
         }
