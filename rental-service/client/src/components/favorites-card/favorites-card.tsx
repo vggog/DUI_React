@@ -8,10 +8,11 @@ type FavoritesCardProps = {
     price: number;
     isPremium: boolean;
     previewImage: string;
+    isFavorite: boolean;
     rating: number;
 }
 
-function FavoritesCard({ id, title, type, price, previewImage, isPremium, rating }: FavoritesCardProps) {
+function FavoritesCard({ id, title, type, price, previewImage, isPremium, rating, isFavorite }: FavoritesCardProps) {
     return(
         <article className="favorites__card place-card">
             {isPremium ? (
@@ -29,11 +30,22 @@ function FavoritesCard({ id, title, type, price, previewImage, isPremium, rating
                         <b className="place-card__price-value">&euro;{ price }</b>
                         <span className="place-card__price-text">&#47;&nbsp;night</span>
                     </div>
-                    <button className="place-card__bookmark-button place-card__bookmark-button--active button" type="button">
+                    {/*<button className="place-card__bookmark-button place-card__bookmark-button--active button" type="button">*/}
+                    {/*    <svg className="place-card__bookmark-icon" width="18" height="19">*/}
+                    {/*        <use href="#icon-bookmark"></use>*/}
+                    {/*    </svg>*/}
+                    {/*    <span className="visually-hidden">In bookmarks</span>*/}
+                    {/*</button>*/}
+
+                    <button className={`place-card__bookmark-button button ${isFavorite ? 'place-card__bookmark-button--active' : ''}`} type="button">
                         <svg className="place-card__bookmark-icon" width="18" height="19">
-                            <use href="#icon-bookmark"></use>
+                            <use href="/img/sprite.svg#icon-bookmark"></use>
+                            {/*<svg width="17" height="18" viewBox="0 0 17 18" xmlns="http://www.w3.org/2000/svg">*/}
+                            {/*    <path d="M3.993 2.185l.017-.092V2c0-.554.449-1 .99-1h10c.522 0 .957.41.997.923l-2.736 14.59-4.814-2.407-.39-.195-.408.153L1.31 16.44 3.993 2.185z"/>*/}
+                            {/*</svg>*/}
+
                         </svg>
-                        <span className="visually-hidden">In bookmarks</span>
+                        <span className="visually-hidden">To bookmarks</span>
                     </button>
                 </div>
                 <div className="place-card__rating rating">

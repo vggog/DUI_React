@@ -20,6 +20,7 @@ function CitiesCardList({ offersList, setSelectPoint }: CitiesCardListProps){
                 isPremium={ item.isPremium }
                 rating={ item.rating }
                 setSelectPoint={setSelectPoint}
+                isFavorite={item.isFavorite}
             />)
     );
 }

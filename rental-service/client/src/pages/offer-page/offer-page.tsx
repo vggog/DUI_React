@@ -4,11 +4,11 @@ import {Link, useParams} from "react-router-dom";
 import {NotFound} from "../../components/not-found/not-found.tsx";
 import {ReviewForm} from "../../components/review-form/review-form.tsx";
 import {ReviewsList} from "../../components/review-list/review-list.component.tsx";
-import type {ReviewType} from "../../types/reviews.ts";
+import type {ReviewType, User} from "../../types/reviews.ts";
 import Map from "../../components/map/map.tsx";
 import {CitiesCardList} from "../../components/cities-card-list/cities-card-list.tsx";
 import {mapFullOffersToOffersList} from "../../mocks/offers-list.ts";
-import {useEffect} from "react";
+import {useEffect, useState} from "react";
 import {AppRoute} from "../../constants.ts";
 
 type OfferPageProps = {
@@ -20,16 +20,19 @@ type OfferPageProps = {
 function OfferPage({favoriteCount, offers, reviews}: OfferPageProps) {
     const params = useParams();
     const offer = offers.find(offer => offer.id === params.id);
+
     if (!offer) {
         return <NotFound />;
     }
 
+    const [offerReviews, setOfferReviews] = useState<ReviewType[]>(
+        reviews.filter(review => review.offerId === offer.id)
+    );
+
     const nearbyOffers: FullOffer[] = offer
         .neighbors
         .map((neighborId) => offers.find((offer) => offer.id === neighborId))
-        .filter((offer) => offer !== undefined);
-
-    const offerReviews: ReviewType[] = reviews.filter(review => review.offerId === offer.id);
+        .filter((offer) => offer !== undefined) as FullOffer[];
 
     const city = offers.find((offer: FullOffer) => offer.id === params.id)?.city;
     const points = nearbyOffers.map((offer: FullOffer) => offer.location);
@@ -39,6 +42,25 @@ function OfferPage({favoriteCount, offers, reviews}: OfferPageProps) {
     useEffect(() => {
         window.scrollTo(0, 0);
     }, [params.id]);
+
+    const handleAddReview = (newReviewData: { rating: number; comment: string }) => {
+        const currentUser: User = {
+            name: "Myemail@gmail.com",
+            avatarUrl: "/img/avatar.svg",
+            isPro: false
+        };
+
+        const newReview: ReviewType = {
+            id: Date.now(),
+            offerId: offer.id,
+            rating: newReviewData.rating,
+            comment: newReviewData.comment,
+            date: new Date().toISOString(),
+            user: currentUser
+        };
+
+        setOfferReviews(prevReviews => [newReview, ...prevReviews]);
+    };
 
     return (
         <div className="page">
@@ -156,7 +178,7 @@ function OfferPage({favoriteCount, offers, reviews}: OfferPageProps) {
                             <section className="offer__reviews reviews">
                                 <ReviewsList reviews={offerReviews} />
 
-                                <ReviewForm />
+                                <ReviewForm onReviewAdded={handleAddReview} />
                             </section>
                         </div>
                     </div>

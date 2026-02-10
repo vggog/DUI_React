@@ -1,10 +1,10 @@
 import {type ChangeEvent, type FormEvent, useState} from "react";
 
-// type ReviewFormProps = {
-//     printFunction: (rating: number | null, review: string) => void;
-// };
+type ReviewFormProps = {
+    onReviewAdded: (newReview: { rating: number; comment: string }) => void;
+};
 
-function ReviewForm() {
+function ReviewForm({ onReviewAdded }: ReviewFormProps) {
     const [rating, setRating] = useState<number | null>(null);
     const [review, setReview] = useState('');
 
@@ -18,7 +18,21 @@ function ReviewForm() {
 
     const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        console.log({ rating, review });
+
+        if (!rating || review.trim().length < 5) {
+            alert('Please provide a rating and review of at least 50 characters');
+            return;
+        }
+
+        const newReview = {
+            rating,
+            comment: review,
+        };
+
+        onReviewAdded(newReview);
+
+        setRating(null);
+        setReview('');
     };
 
     return (
@@ -95,6 +109,7 @@ function ReviewForm() {
                     least <b className="reviews__text-amount">50 characters</b>.
                 </p>
                 <button className="reviews__submit form__submit button" type="submit"
+                        disabled={!rating || review.trim().length < 5}
                 >Submit
                 </button>
             </div>
