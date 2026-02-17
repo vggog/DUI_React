@@ -52,3 +52,4 @@ jobs:
           
           # Проверяем статус
           docker compose ps
+          
