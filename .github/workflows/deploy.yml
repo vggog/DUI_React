@@ -45,10 +45,10 @@ jobs:
           cd ~/app
           
           # Останавливаем старые контейнеры
-          docker-compose down || true
+          docker compose down || true
           
           # Собираем и запускаем заново
-          docker-compose up -d --build
+          docker compose up -d --build
           
           # Проверяем статус
-          docker-compose ps
+          docker compose ps
