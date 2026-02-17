@@ -1,0 +1,54 @@
+name: Auto Deploy to Server
+
+on:
+  push:
+    branches: [ main, master, backend/lab1 ]  # при пуше в эти ветки
+
+jobs:
+  deploy:
+    # Используем наш self-hosted runner
+    runs-on: self-hosted
+    # Если добавляли метки, можно уточнить:
+    # runs-on: [self-hosted, prod, docker]
+
+    steps:
+      # 1. Клонируем код
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # 2. Сборка приложения (если нужно тестировать)
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Restore dependencies
+        run: dotnet restore
+
+      - name: Build
+        run: dotnet build --configuration Release --no-restore
+
+      # 3. Деплой через Docker Compose
+      - name: Deploy with Docker Compose
+        run: |
+          # Переходим в домашнюю папку (или создаём проектную)
+          cd ~
+          
+          # Создаём папку для проекта, если её нет
+          mkdir -p ~/app
+          
+          # Копируем docker-compose.yml из репозитория
+          cp ${{ github.workspace }}/docker-compose.yml ~/app/
+          
+          # Копируем папку с приложением (если собираете локально)
+          # или просто переходим в папку проекта
+          cd ~/app
+          
+          # Останавливаем старые контейнеры
+          docker-compose down || true
+          
+          # Собираем и запускаем заново
+          docker-compose up -d --build
+          
+          # Проверяем статус
+          docker-compose ps
