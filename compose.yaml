@@ -8,7 +8,19 @@
       - "8080:8080"
       - "8081:8081"
     depends_on:
-      - db
+      db:
+        condition: service_healthy
+
+  frontend:
+    image: frontend-app
+    build:
+      # Указываем контекст в папку фронтенда
+      context: ./rental-service/client
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+    depends_on:
+      - api
 
   db:
     image: postgres:18
@@ -17,8 +29,6 @@
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
     volumes:
-      # For Postgres 18+ the recommended mount point is /var/lib/postgresql
-      # so the server can use version-specific subdirectories (see docker-library/postgres PRs).
       - pgdata:/var/lib/postgresql
     ports:
       - "5432:5432"
@@ -28,7 +38,6 @@
       interval: 5s
       timeout: 5s
       retries: 5
-
 
 volumes:
   pgdata:
