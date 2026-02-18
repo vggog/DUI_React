@@ -16,19 +16,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # 2. Сборка приложения (если нужно тестировать)
-#      - name: Setup .NET
-#        uses: actions/setup-dotnet@v4
-#        with:
-#          dotnet-version: '8.0.x'
-#
-#      - name: Restore dependencies
-#        run: dotnet restore
-#
-#      - name: Build
-#        run: dotnet build --configuration Release --no-restore
-
-      # 3. Деплой через Docker Compose
+      # 2. Деплой через Docker Compose
       - name: Deploy with Docker Compose
         run: |
           # Переходим в домашнюю папку (или создаём проектную)
@@ -38,7 +26,7 @@ jobs:
           mkdir -p ~/app
           
           # Копируем docker-compose.yml из репозитория
-          cp ${{ github.workspace }}/compose.yaml ~/app/
+          cp -r ${{ github.workspace }}/. ~/app/
           
           # Копируем папку с приложением (если собираете локально)
           # или просто переходим в папку проекта
