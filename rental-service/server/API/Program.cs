@@ -45,10 +45,10 @@ if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
 }
-else
-{
-    app.UseHttpsRedirection();
-}
+// else
+// {
+//     app.UseHttpsRedirection();
+// }
 
 app.MapApiRoutes();
 
