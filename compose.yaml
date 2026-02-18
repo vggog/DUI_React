@@ -3,7 +3,7 @@
     image: api
     build:
       context: .
-      dockerfile: rental-service/server/API/Dockerfile
+      dockerfile: ./rental-service/server/API/Dockerfile
     ports:
       - "8080:8080"
       - "8081:8081"
