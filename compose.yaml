@@ -1,40 +1,43 @@
-﻿services:
-  api:
-    image: api
-    build:
-      context: .
-      dockerfile: ./rental-service/server/API/Dockerfile
-    depends_on:
-      db:
-        condition: service_healthy
+﻿version: '3.8'
 
-  frontend:
-    image: frontend-app
-    build:
-      # Указываем контекст в папку фронтенда
-      context: ./rental-service/client
-      dockerfile: Dockerfile
-    ports:
-      - "80:80"
-    depends_on:
-      - api
-
+services:
   db:
-    image: postgres:18
+    image: postgres:15-alpine
+    container_name: postgres_db
+    restart: always
+    # Docker Compose автоматически подставит значения из .env
     environment:
-      POSTGRES_DB: appdb
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-    volumes:
-      - pgdata:/var/lib/postgresql
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
     ports:
       - "5432:5432"
-    restart: unless-stopped
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres -d appdb"]
-      interval: 5s
-      timeout: 5s
-      retries: 5
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - app-network
+
+  server:
+    build:
+      context: ./rental-service/nodejs
+      dockerfile: Dockerfile
+    container_name: nodejs_server
+    restart: always
+    ports:
+      - "${PORT}:${PORT}"
+    # Передаем переменные в Node.js
+    environment:
+      - DATABASE_URL=${DATABASE_URL}
+      - PORT=${PORT}
+      - NODE_ENV=${NODE_ENV}
+    depends_on:
+      - db
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
 
 volumes:
   pgdata:
