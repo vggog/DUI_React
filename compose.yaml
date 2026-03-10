@@ -31,7 +31,8 @@ services:
       - PORT=${PORT}
       - NODE_ENV=${NODE_ENV}
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     networks:
       - app-network
 
