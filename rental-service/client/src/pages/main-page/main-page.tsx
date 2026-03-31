@@ -1,4 +1,4 @@
-import {Logo} from "../../components/logo/logo.tsx";
+import {Header} from "../../components/header/header.tsx";
 import {CitiesCardList} from "../../components/cities-card-list/cities-card-list.tsx";
 import type {OffersList} from "../../types/offer.ts";
 import Map from "../../components/map/map.tsx";
@@ -10,17 +10,14 @@ import {useAppSelector} from "../../hooks";
 import {getOffersByCity, sortOffersByType} from "../../utils.ts";
 import type {SortOffer} from "../../types/sort.ts";
 import {SortOptions} from "../../components/sort-options/sort-options.component.tsx";
-import {Link} from "react-router-dom";
-import {AppRoute} from "../../constants.ts";
 
 
 type MainPageProps = {
     rentalOffersCount: number,
-    favoriteCount: number,
     offersList: OffersList[],
 };
 
-function MainPage({offersList, favoriteCount}: MainPageProps) {
+function MainPage({}: MainPageProps) {
     const [selectedPoint, setSelectedPoint] = useState<Point | null>(null);
     const [selectedOfferId, setSelectedOfferId] = useState<string | null>(null);
 
@@ -40,10 +37,10 @@ function MainPage({offersList, favoriteCount}: MainPageProps) {
             setCity(foundCity);
         }
 
-        const cityPoints = offersList.filter(offer => offer.city.title === selectedCity.title).map((offer: OffersList) => offer.location);
+        const cityPoints = offersListSelector.filter(offer => offer.city.title === selectedCity?.title).map((offer: OffersList) => offer.location);
 
         setCityPoints(cityPoints);
-    }, [selectedCity]);
+    }, [selectedCity, offersListSelector]);
 
     useEffect(() => {
         if (!selectedOfferId) {
@@ -51,7 +48,7 @@ function MainPage({offersList, favoriteCount}: MainPageProps) {
             return;
         }
 
-        const selectedOffer = offersList.find(
+        const selectedOffer = offersListSelector.find(
             (offer) => offer.id === selectedOfferId,
         );
 
@@ -61,36 +58,11 @@ function MainPage({offersList, favoriteCount}: MainPageProps) {
         }
 
         setSelectedPoint(selectedOffer.location);
-    }, [selectedOfferId, offersList]);
+    }, [selectedOfferId, offersListSelector]);
 
     return (
         <div className="page page--gray page--main">
-            <header className="header">
-                <div className="container">
-                    <div className="header__wrapper">
-                        <div className="header__left">
-                            <Logo/>
-                        </div>
-                        <nav className="header__nav">
-                            <ul className="header__nav-list">
-                                <li className="header__nav-item user">
-                                    <Link to={`${AppRoute.Favorites}`} className="header__nav-link header__nav-link--profile">
-                                        <div>
-                                            <span className="header__user-name user__name">Myemail@gmail.com</span>
-                                            <span className="header__favorite-count">{favoriteCount}</span>
-                                        </div>
-                                    </Link>
-                                </li>
-                                <li className="header__nav-item">
-                                    <a className="header__nav-link" href="#">
-                                        <span className="header__signout">Sign out</span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </nav>
-                    </div>
-                </div>
-            </header>
+            <Header />
 
             <main className="page__main page__main--index">
                 <h1 className="visually-hidden">Cities</h1>

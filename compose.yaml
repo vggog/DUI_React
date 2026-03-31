@@ -1,9 +1,13 @@
 ﻿services:
   api:
     image: api
+#    ports:
+#      - "5000:8080"
     build:
       context: .
       dockerfile: ./rental-service/server/API/Dockerfile
+    volumes:
+      - static-files:/app/wwwroot/static
     depends_on:
       db:
         condition: service_healthy
@@ -38,3 +42,4 @@
 
 volumes:
   pgdata:
+  static-files:

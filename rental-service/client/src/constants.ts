@@ -15,4 +15,14 @@ const AuthorizationStatus = {
     Unknown: 'UNKNOWN',
 }
 
-export {Settings, AppRoute, AuthorizationStatus};
+const APIRoute = {
+    Offers: '/offers',
+    Comments: '/comments',
+    Login: '/login',
+    Logout: '/logout',
+    Favorites: '/favorites',
+}
+
+const TIMEOUT_SHOW_ERROR = 2000;
+
+export {Settings, AppRoute, AuthorizationStatus, APIRoute, TIMEOUT_SHOW_ERROR};

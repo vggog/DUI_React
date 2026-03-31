@@ -7,10 +7,15 @@ import {mapFullOffersToOffersList} from "./mocks/offers-list.ts";
 import {reviews} from "./mocks/reviews.ts";
 import {Provider} from "react-redux";
 import {store} from "./store";
+import {fetchOffersAction} from "./store/api-actions.ts";
+import {ErrorMessage} from "./components/error-message";
+
+store.dispatch(fetchOffersAction());
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
       <Provider store={store}>
+          <ErrorMessage />
           <App
               rentalOffersCount={Settings.rentalOffersCount}
               offersList={mapFullOffersToOffersList(offers)}

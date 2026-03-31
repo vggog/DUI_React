@@ -19,7 +19,7 @@ function ReviewForm({ onReviewAdded }: ReviewFormProps) {
     const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
 
-        if (!rating || review.trim().length < 5) {
+        if (!rating || review.trim().length < 50) {
             alert('Please provide a rating and review of at least 50 characters');
             return;
         }
@@ -109,7 +109,7 @@ function ReviewForm({ onReviewAdded }: ReviewFormProps) {
                     least <b className="reviews__text-amount">50 characters</b>.
                 </p>
                 <button className="reviews__submit form__submit button" type="submit"
-                        disabled={!rating || review.trim().length < 5}
+                        disabled={!rating || review.trim().length < 50}
                 >Submit
                 </button>
             </div>

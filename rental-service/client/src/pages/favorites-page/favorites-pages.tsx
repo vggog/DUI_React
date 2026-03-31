@@ -1,49 +1,41 @@
-import {Logo} from "../../components/logo/logo.tsx";
+import {Header} from "../../components/header/header.tsx";
 import {FavoritesCardList} from "../../components/favorites-card-list/favorites-card-list.tsx";
 import type {OffersList} from "../../types/offer.ts";
-import {Link} from "react-router-dom";
-import {AppRoute} from "../../constants.ts";
+import {useEffect, useState} from "react";
+import {fetchFavoritesAction} from "../../store/api-actions.ts";
+import {useAppDispatch} from "../../hooks/index.ts";
 
-type FavoritesCardListProps = {
-    favoriteCount: number,
-    offersList: OffersList[],
-}
+function FavoritesPages() {
+    const dispatch = useAppDispatch();
+    const [favorites, setFavorites] = useState<OffersList[]>([]);
+    const [isLoading, setIsLoading] = useState(true);
 
-function FavoritesPages({ favoriteCount, offersList} : FavoritesCardListProps) {
+    useEffect(() => {
+        setIsLoading(true);
+        dispatch(fetchFavoritesAction())
+            .unwrap()
+            .then((data) => {
+                setFavorites(data);
+                setIsLoading(false);
+            })
+            .catch(() => {
+                setIsLoading(false);
+            });
+    }, [dispatch]);
+
+    if (isLoading) {
+        return <div>Loading...</div>;
+    }
+
     return (
         <div className="page">
-            <header className="header">
-                <div className="container">
-                    <div className="header__wrapper">
-                        <div className="header__left">
-                            <Logo />
-                        </div>
-                        <nav className="header__nav">
-                            <ul className="header__nav-list">
-                                <li className="header__nav-item user">
-                                    <Link to={`${AppRoute.Favorites}`} className="header__nav-link header__nav-link--profile">
-                                        <div>
-                                            <span className="header__user-name user__name">Myemail@gmail.com</span>
-                                            <span className="header__favorite-count">{favoriteCount}</span>
-                                        </div>
-                                    </Link>
-                                </li>
-                                <li className="header__nav-item">
-                                    <a className="header__nav-link" href="#">
-                                        <span className="header__signout">Sign out</span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </nav>
-                    </div>
-                </div>
-            </header>
+            <Header favoriteCount={favorites.length} />
 
             <main className="page__main page__main--favorites">
                 <div className="page__favorites-container container">
                     <section className="favorites">
                         <h1 className="favorites__title">Saved listing</h1>
-                        <FavoritesCardList offersList={offersList} />
+                        <FavoritesCardList offersList={favorites} />
                     </section>
                 </div>
             </main>

@@ -13,6 +13,7 @@ public class ApplicationDbContext : DbContext
     public DbSet<User> Users { get; set; }
     public DbSet<Offer> Offers { get; set; }
     public DbSet<Review> Reviews { get; set; }
+    public DbSet<Favorite> Favorites { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -55,6 +56,22 @@ public class ApplicationDbContext : DbContext
             .WithMany(u => u.Offers)
             .HasForeignKey(o => o.AuthorId)
             .OnDelete(DeleteBehavior.Restrict);
+
+        modelBuilder.Entity<Favorite>()
+            .HasOne(f => f.User)
+            .WithMany()
+            .HasForeignKey(f => f.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<Favorite>()
+            .HasOne(f => f.Offer)
+            .WithMany()
+            .HasForeignKey(f => f.OfferId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<Favorite>()
+            .HasIndex(f => new { f.UserId, f.OfferId })
+            .IsUnique();
     }
 
     public override int SaveChanges()

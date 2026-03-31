@@ -10,13 +10,14 @@ function Review(props: ReviewProps) {
     return (
         <li className="reviews__item">
         <div className="reviews__user user">
-        <div className="reviews__avatar-wrapper user__avatar-wrapper">
+        <div className="reviews__avatar-wrapper user__avatar-wrapper" style={{width: '54px', height: '54px', overflow: 'hidden', borderRadius: '50%'}}>
         <img
             className="reviews__avatar user__avatar"
     src={review.user.avatarUrl}
     width="54"
     height="54"
     alt="Reviews avatar"
+            style={{objectFit: 'cover', width: '100%', height: '100%'}}
         />
         </div>
         <span className="reviews__user-name">

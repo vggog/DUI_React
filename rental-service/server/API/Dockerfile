@@ -18,6 +18,12 @@ ARG BUILD_CONFIGURATION=Release
 RUN dotnet publish "./API.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
+USER root
 WORKDIR /app
 COPY --from=publish /app/publish .
+
+# Создаем директорию для статических файлов и даем права на запись
+RUN mkdir -p /app/wwwroot/static && chown -R $APP_UID:$APP_UID /app/wwwroot
+
+USER $APP_UID
 ENTRYPOINT ["dotnet", "API.dll"]

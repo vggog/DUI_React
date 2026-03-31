@@ -22,6 +22,30 @@ namespace API.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
+            modelBuilder.Entity("API.Models.Favorite", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("OfferId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OfferId");
+
+                    b.HasIndex("UserId", "OfferId")
+                        .IsUnique();
+
+                    b.ToTable("Favorites");
+                });
+
             modelBuilder.Entity("API.Models.Offer", b =>
                 {
                     b.Property<int>("Id")
@@ -220,6 +244,25 @@ namespace API.Migrations
                         .IsUnique();
 
                     b.ToTable("users");
+                });
+
+            modelBuilder.Entity("API.Models.Favorite", b =>
+                {
+                    b.HasOne("API.Models.Offer", "Offer")
+                        .WithMany()
+                        .HasForeignKey("OfferId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("API.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Offer");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("API.Models.Offer", b =>
